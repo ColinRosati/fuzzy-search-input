@@ -1,46 +1,42 @@
-# Getting Started with Create React App
+# Fuzzy Search input
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This input fuzzy search or autocompletes search results. The data comes from JSON file of fruits in this repo `src/constants/fruits.JSON`
 
-## Available Scripts
+## Steps to run
 
-In the project directory, you can run:
+### `yarn` or `npm install`
+
+Download dependencies
 
 ### `yarn start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
 ### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To run unit tests
 
-### `yarn build`
+## Criteria
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Functional requirements:
+1. It must be built in React; feel free to use a styling solution of your choice
+2. Upon typing, the widget fuzzy-matches case-insensitively against the list at the end of this document and presents list items that contain the matched characters as suggestions
+3. Clicking an autocomplete suggestion should fill in the input with the full text
+4. Using the up and down arrow keys should allow the user to highlight a desired suggestion and press Enter to select it, filling in the input
+5. The input should be a valid HTML text input element to be used in a standard HTML form setup
+6. The user should be able to proceed without choosing one of the suggestions (non-exclusive)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Styling requirements:
+1. The widget match suggestions should appear below the text input as a floating container
+2. The floating suggestion area should become scrollable when there are many suggestions
+3. The matched portion of the suggestion should be highlighted in some way
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Misc comments
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+this is the result of developing a fuzzy search input in a 3 hour code sprint.
+If I had more time I would have made more integration tests to assert the flow of keypress and UI validation, 
+as well as give the styling some more TLC to really make it ✨sparkle✨.
+I decided to use useEventListener hook as dependable interface handle key events.
