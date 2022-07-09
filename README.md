@@ -2,6 +2,18 @@
 
 This input fuzzy search or autocompletes search results. The data comes from JSON file of fruits in this repo `src/constants/fruits.JSON`
 
+<img width="354" alt="Screenshot 2022-07-09 at 11 26 47 AM" src="https://user-images.githubusercontent.com/16339467/178099995-a5fe02e8-bde9-4972-832b-1a43e9b5b529.png">
+
+-----
+<img width="346" alt="Screenshot 2022-07-09 at 11 25 02 AM" src="https://user-images.githubusercontent.com/16339467/178099971-49ef075e-f890-4169-b023-2ada0a168d6a.png">
+
+-----
+<img width="343" alt="Screenshot 2022-07-09 at 11 24 42 AM" src="https://user-images.githubusercontent.com/16339467/178099973-d259e717-be92-4451-8ade-3a64387309e0.png">
+
+----- 
+Screenshots
+
+
 ## Steps to run
 
 ### `yarn` or `npm install`
