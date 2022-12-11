@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { unmountComponentAtNode } from "react-dom";
 import { act , isElement, isElementOfType, renderIntoDocument } from "react-dom/test-utils";
 import { render, fireEvent } from '@testing-library/react';

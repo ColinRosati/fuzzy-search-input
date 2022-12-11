@@ -1,6 +1,9 @@
-import styles from "./Autocomplete.module.scss";
+const filterResultsInputMatched = (result: string, input: string) =>
+  result.toLowerCase() !== input.toLowerCase() && result.toLowerCase().startsWith(input.toLowerCase());
 
-export const sort = (input: string, results: string[]): string[] | undefined => {
+const sortDescending = (a: string, b: string) => a > b ? 1 : -1;
+
+export const sort = (input: string, results: string[]): string[] => {
     if(!input || input === ''){
         return [];
     }
@@ -8,45 +11,29 @@ export const sort = (input: string, results: string[]): string[] | undefined => 
     let sorted: string[] = [];
 
     if(input){
-        sorted = Array.from(new Set(results.filter(x => x.toLowerCase() !== input.toLowerCase() && x.toLowerCase().startsWith(input.toLowerCase()))
-            .sort((a, b) => {
-                if (a > b) {
-                    return 1;
-                }
-                if (a < b) {
-                    return -1;
-                }
-                return 0;
-            })));
+      sorted = Array.from(
+        new Set(
+          results.filter((result) => filterResultsInputMatched(result, input))
+            .sort(sortDescending)));
     }
 
     return sorted;
 };
 
+const keyIteration: Record<string, number> = {
+  'ArrowDown' : +1,
+  'ArrowUp': -1
+}
+
 export const onKeyMap = (e: KeyboardEvent, autofill: string[], fillValue: {text: string, index: number}, setFillValue: React.Dispatch<React.SetStateAction<{text: string, index: number}>>) => {
-    document.querySelectorAll('li').forEach(element => element.classList.remove(styles.active));
+  if (autofill?.length && typeof keyIteration[e.code] === 'number') {
+    const suggestionIncrement = keyIteration[e.code];
+    const newIndex = suggestionIncrement + fillValue.index;
+    // reset when boundary limits reached 
+    const boundaryIndex = newIndex === -1 ? autofill.length - 1 : 0;
+    const index = autofill[newIndex] ? newIndex : boundaryIndex;
+    const newValue = autofill[index];
 
-    if (e.code === 'Enter') {
-        setFillValue({
-            ...fillValue,
-            text: autofill![fillValue.index]
-        })
-    }
-
-    if (e.code === 'ArrowUp' && autofill) {
-        const _index = fillValue.index > 0 ? fillValue.index - 1 : fillValue.index + autofill.length;
-
-        setFillValue({...fillValue, index: _index});
-
-        document.querySelector(`.${autofill && autofill[_index]?.replace(/\\s/g, '')}`)
-            ?.classList.toggle(styles.active);
-    }
-
-    if (e.code === 'ArrowDown' && autofill) {
-        const _index = fillValue.index < autofill.length ? fillValue.index + 1 : fillValue.index - autofill.length;
-
-        setFillValue({...fillValue, index: _index});
-        document.querySelector(`.${autofill && autofill[_index]?.replace(/\\s/g, '')}`)
-            ?.classList.toggle(styles.active);
-    }
+    setFillValue({text: newValue, index});
+  }
 }

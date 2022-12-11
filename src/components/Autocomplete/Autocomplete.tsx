@@ -1,11 +1,11 @@
-import React, {ReactElement, useState} from 'react';
+import { ReactElement, useState} from 'react';
 import useEventListener from "@use-it/event-listener";
 
 import results from '../../constants/fruits.json';
 
 import styles from './Autocomplete.module.scss';
 import { onKeyMap, sort } from "./logic";
-import { HandleChange, HandleClick, SetAutoFillState, SetFillValueState } from "./types";
+import type { HandleInputChange, HandleClickSuggestion, SetAutoFillState, SetFillValueState } from "./types";
 
 const Autocomplete = (): ReactElement => {
     const [autofill, setAutofill] = useState<SetAutoFillState>(undefined);
@@ -14,38 +14,41 @@ const Autocomplete = (): ReactElement => {
         index: 0,
     });
 
-    useEventListener('keydown', (e: KeyboardEvent) => onKeyMap(e, autofill!, fillValue, setFillValue ));
+  useEventListener('keydown', (e: KeyboardEvent) => onKeyMap(e, autofill!, fillValue, setFillValue));
 
-    const handleChange: HandleChange = (e) => {
+    const handleInputChange: HandleInputChange = (e) => {
         const input = e.target.value;
 
         if(!input) {
-            setAutofill([])
-            setFillValue({...fillValue})
+          setAutofill([]);
+          setFillValue({ ...fillValue });
         }
 
-        const sorted = sort(input as string, results.fruits)
-        setAutofill(sorted)
-        setFillValue({ text: input as string, index: 0})
+      const sorted = sort(input as string, results.fruits);
+      setAutofill(sorted);
+      setFillValue({ text: input as string, index: 0 });
     }
 
-    const handleClick: HandleClick = (e) => {
-        const value = (e.target as HTMLLIElement).innerText
-        setFillValue({text: value, index: autofill?.indexOf(value)!})
-        document.querySelectorAll('li').forEach(element => element.classList.remove(styles.active));
-        document.querySelector(`.${(e.target as HTMLLIElement).classList.value}`)?.classList.toggle(styles.active)
-        e.preventDefault();
+    const handleClickSuggestion: HandleClickSuggestion = (e) => {
+      const value = (e.target as HTMLLIElement).innerText
+      const newFillState = { text: value, index: autofill?.indexOf(value)! };
+
+      setFillValue(newFillState)
     };
+  
+  const setActiveStyle = (value: string): string => {
+    return fillValue.text === value ? styles.active: ""
+  }
 
     return(
         <div className={styles.inputWrapper}>
-            <input onChange={handleChange} value={fillValue.text} data-testid='Autocomplete__input'/>
+            <input onChange={handleInputChange} value={fillValue.text} data-testid='Autocomplete__input'/>
             <ul className={styles.resultsWrapper} data-testid='Autocomplete__input--results' >{
                 autofill && autofill!.map((suggestion, index) =>
-                    <li
-                        className={suggestion.replace(/\s/g, '')}
-                        onClick={(e) => handleClick(e)}
-                        key={`${index}-${suggestion}`}
+                  <li 
+                    onClick={(e) => handleClickSuggestion(e)}
+                    className={setActiveStyle(suggestion)}
+                    key={`${index}-${suggestion}`}
                     >{suggestion}</li>
                 )}
             </ul>
